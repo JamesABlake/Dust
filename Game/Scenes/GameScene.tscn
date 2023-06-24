@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [gd_scene load_steps=2 format=3 uid="uid://pk8430c0po35"]
 
 [ext_resource type="BoxMesh" uid="uid://dxwbco126vt71" path="res://Resources/Objects/Box.tres" id="1_6jaf4"]
@@ -18,3 +19,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.5, 0)
 mesh = ExtResource("1_6jaf4")
 skeleton = NodePath("../..")
+=======
+[gd_scene load_steps=3 format=3 uid="uid://pk8430c0po35"]
+
+[ext_resource type="PackedScene" uid="uid://dwin3uknp88rs" path="res://Game/Prefabs/Wall.tscn" id="1_w8e0h"]
+[ext_resource type="Script" path="res://Game/Scripts/Test.cs" id="1_xjdp3"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_xjdp3")
+
+[node name="Wall" parent="." instance=ExtResource("1_w8e0h")]
+
+[node name="Wall2" parent="." instance=ExtResource("1_w8e0h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.156159, 0.493866, -0.855401, 0, 0.866025, 0.5, 0.987732, -0.0780793, 0.135237, -2.33307, 1.7174, 0.0500557)
+>>>>>>> 77353f1f30afadd08418e3ece833f307ef6dc6ed
