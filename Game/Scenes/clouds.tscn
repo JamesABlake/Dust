@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://wxheno2omn4o"]
+
+[ext_resource type="Shader" path="res://Game/Shaders/clouds.gdshader" id="1_5aabm"]
+
+[sub_resource type="ImageTexture3D" id="ImageTexture3D_7tj72"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2cph8"]
+render_priority = 0
+shader = ExtResource("1_5aabm")
+shader_parameter/cloud_heights = Vector4(-105, -95, -5, 5)
+shader_parameter/cloud_offset = Vector3(-0.083, 0, 0)
+shader_parameter/cloud_scale = Vector3(0.05, 0.05, 0.05)
+shader_parameter/cloud_density_mod = 1.0
+shader_parameter/light_absorption_to_cloud = 0.95
+shader_parameter/light_absorption_to_sun = 0.2
+shader_parameter/light_dir = Vector3(-0.4, -0.8, -0.4)
+shader_parameter/light_color = Vector3(1, 1, 1)
+shader_parameter/phase_value = 0.85
+shader_parameter/num_steps = 128
+shader_parameter/num_steps_light = 2
+shader_parameter/cloud_noise = SubResource("ImageTexture3D_7tj72")
+
+[sub_resource type="QuadMesh" id="QuadMesh_lbsr0"]
+material = SubResource("ShaderMaterial_2cph8")
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ck0uj"]
+albedo_color = Color(0.627451, 0, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5o3om"]
+material = SubResource("StandardMaterial3D_ck0uj")
+
+[sub_resource type="BoxMesh" id="BoxMesh_m3v7u"]
+
+[node name="Clouds" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49817, 2.895)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.11706, 13.2837, -25.3851)
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_lbsr0")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-99.916, 0.0409861, -1.49652e-05, 4.08141, 0.994967, -9.1519, -0.375086, -0.0914421, -99.5803, 0, 0, 68.142)
+extra_cull_margin = 16384.0
+mesh = SubResource("PlaneMesh_5o3om")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.848556, 0, 0.529105, 0, 1, 0, -0.529105, 0, 0.848556, -1.08542, 0.315276, 0)
+mesh = SubResource("BoxMesh_m3v7u")
+skeleton = NodePath("../MeshInstance3D2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.450878, 0.892586, 0, -0.892586, 0.450878, 0, 3.58353, 0)
+light_angular_distance = 10.0
