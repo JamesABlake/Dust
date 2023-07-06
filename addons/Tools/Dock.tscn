@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://dm1usmd58ycix"]
+
+[ext_resource type="Script" path="res://addons/Tools/Dock.cs" id="1_cde45"]
+[ext_resource type="PackedScene" uid="uid://cyckujatsi752" path="res://Game/Prefabs/UI_Vector3I.tscn" id="2_cmx62"]
+
+[node name="Panel" type="Panel" node_paths=PackedStringArray("label", "itemsList", "start", "end")]
+anchors_preset = -1
+anchor_right = 0.347
+anchor_bottom = 1.235
+offset_right = 0.255981
+offset_bottom = -0.280029
+script = ExtResource("1_cde45")
+label = NodePath("Label")
+itemsList = NodePath("ItemList")
+start = NodePath("Start")
+end = NodePath("End")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.5
+offset_right = -72.0
+offset_bottom = 26.0
+grow_horizontal = 2
+text = "Test"
+
+[node name="ItemList" type="ItemList" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.08
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Start" parent="." instance=ExtResource("2_cmx62")]
+layout_mode = 1
+offset_left = 184.0
+offset_right = 325.2
+offset_bottom = -7.2
+
+[node name="End" parent="." instance=ExtResource("2_cmx62")]
+layout_mode = 1
+offset_left = 184.0
+offset_top = 32.0
+offset_right = 325.2
+offset_bottom = 24.8
+scale = Vector2(1, 1.00455)

@@ -1,15 +1,42 @@
 [gd_scene load_steps=3 format=3 uid="uid://pk8430c0po35"]
 
-[ext_resource type="PackedScene" uid="uid://dwin3uknp88rs" path="res://Game/Prefabs/Wall.tscn" id="1_w8e0h"]
-[ext_resource type="Script" path="res://Game/Scripts/Test.cs" id="1_xjdp3"]
+[ext_resource type="Script" path="res://Game/Scripts/Grid.cs" id="1_cenyj"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_aa2yu"]
+script/source = "using Godot;
+namespace Dust;
+public partial class Test : Node3D
+{
+	private Vector2 _mousePosition;
+
+	public override void _PhysicsProcess(double delta)
+	{
+		var camera3D = GetNode<Camera3D>(\"Camera3D\");
+		var from = camera3D.ProjectRayOrigin(_mousePosition);
+		var to = from + (camera3D.ProjectRayNormal(_mousePosition) * 100);
+
+		var space = GetWorld3D().DirectSpaceState;
+		var ray = PhysicsRayQueryParameters3D.Create(from, to);
+		ray.CollideWithBodies = true;
+		var result = space.IntersectRay(ray);
+
+		if (result.Count > 0)
+			GD.Print($\"Hit at {result[\"position\"]}\");
+	}
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventMouseMotion eventMouseMotion)
+			_mousePosition = eventMouseMotion.Position;
+	}
+}
+"
 
 [node name="Node3D" type="Node3D"]
-script = ExtResource("1_xjdp3")
-
-[node name="Wall" parent="." instance=ExtResource("1_w8e0h")]
-
-[node name="Wall2" parent="." instance=ExtResource("1_w8e0h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+script = SubResource("CSharpScript_aa2yu")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.156159, 0.493866, -0.855401, 0, 0.866025, 0.5, 0.987732, -0.0780793, 0.135237, -2.33307, 1.7174, 0.0500557)
+transform = Transform3D(-0.939663, 0.171051, -0.296269, -7.35918e-09, 0.866025, 0.5, 0.342103, 0.469832, -0.813772, 3.18068, 1.7174, 0.0500557)
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.322443, 0.85, 0.068)
+script = ExtResource("1_cenyj")

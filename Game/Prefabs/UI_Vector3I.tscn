@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyckujatsi752"]
+
+[ext_resource type="Script" path="res://Game/Scripts/UI_Vector3I.cs" id="1_esbcd"]
+[ext_resource type="PackedScene" uid="uid://do5vyk4rm4jv7" path="res://Game/Prefabs/NumberLine.tscn" id="2_40gr3"]
+
+[node name="Vector" type="Control" node_paths=PackedStringArray("X", "Y", "Z")]
+layout_mode = 3
+anchor_right = 0.187
+anchor_bottom = 0.049
+offset_right = 0.575989
+offset_bottom = 0.247999
+script = ExtResource("1_esbcd")
+X = NodePath("X")
+Y = NodePath("Y")
+Z = NodePath("Z")
+
+[node name="X" parent="." instance=ExtResource("2_40gr3")]
+layout_mode = 2
+grow_horizontal = 0
+placeholder_text = "X"
+
+[node name="Y" parent="." instance=ExtResource("2_40gr3")]
+layout_mode = 2
+offset_left = 72.0
+offset_right = 144.0
+grow_horizontal = 0
+placeholder_text = "Y"
+
+[node name="Z" parent="." instance=ExtResource("2_40gr3")]
+layout_mode = 2
+offset_left = 144.0
+offset_right = 216.0
+grow_horizontal = 0
+placeholder_text = "Z"
