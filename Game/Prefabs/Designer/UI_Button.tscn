@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bni8d78amkvwy"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_amfkb"]
+allow_unpress = true
+
+[node name="Button" type="Button"]
+custom_minimum_size = Vector2(64, 64)
+offset_top = -64.0
+offset_right = 64.0
+toggle_mode = true
+button_group = SubResource("ButtonGroup_amfkb")
+text = "Floor"

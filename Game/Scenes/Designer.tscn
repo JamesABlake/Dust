@@ -1,0 +1,141 @@
+[gd_scene load_steps=10 format=3 uid="uid://0dsmbxkwvv0v"]
+
+[ext_resource type="Script" path="res://Game/Scripts/CameraController.cs" id="1_yu0s7"]
+[ext_resource type="Script" path="res://Game/Scripts/Grids/Editor/ObjectSelector.cs" id="2_rp0i3"]
+[ext_resource type="PackedScene" uid="uid://dwin3uknp88rs" path="res://Game/Prefabs/Wall.tscn" id="3_23tov"]
+[ext_resource type="PackedScene" uid="uid://dulff7qmhus1q" path="res://Game/Prefabs/Floor.tscn" id="4_3iesi"]
+[ext_resource type="PackedScene" uid="uid://bni8d78amkvwy" path="res://Game/Prefabs/Designer/UI_Button.tscn" id="4_yyl1y"]
+[ext_resource type="PackedScene" uid="uid://bu1ik4xssta1n" path="res://Game/Prefabs/Roof.tscn" id="5_nltoh"]
+[ext_resource type="Script" path="res://Game/Scripts/Grids/Grid3D.cs" id="6_6le7n"]
+[ext_resource type="Script" path="res://Game/Scripts/Grids/Editor/GridEditor.cs" id="7_67se0"]
+[ext_resource type="Script" path="res://Game/Scripts/UserInterface/UI_SaveMenu.cs" id="8_7syiq"]
+
+[node name="Designer" type="Node3D"]
+
+[node name="CameraBase" type="Node3D" parent="." node_paths=PackedStringArray("Boom", "Camera")]
+script = ExtResource("1_yu0s7")
+Boom = NodePath("CameraBoom")
+Camera = NodePath("CameraBoom/Camera3D")
+MoveSpeedMod = 10.0
+RotationSpeedMod = 0.01
+
+[node name="CameraBoom" type="Node3D" parent="CameraBase"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraBase/CameraBoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GridEditor" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("Selector", "Grid3D")]
+script = ExtResource("7_67se0")
+Radius = 20
+Selector = NodePath("Object Selector")
+Grid3D = NodePath("../../Grid3D")
+
+[node name="Object Selector" type="Control" parent="CanvasLayer/GridEditor" node_paths=PackedStringArray("Label", "ButtonContainer")]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+script = ExtResource("2_rp0i3")
+Palette = Array[PackedScene]([ExtResource("4_3iesi"), ExtResource("3_23tov"), ExtResource("5_nltoh")])
+Label = NodePath("Label")
+ButtonContainer = NodePath("PanelContainer/MarginContainer/HBoxContainer")
+ButtonPrefab = ExtResource("4_yyl1y")
+
+[node name="Label" type="Label" parent="CanvasLayer/GridEditor/Object Selector"]
+layout_mode = 2
+offset_top = -104.0
+offset_right = 224.0
+offset_bottom = -72.0
+grow_vertical = 0
+text = "Selected Label"
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/GridEditor/Object Selector"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_right = 80.0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/GridEditor/Object Selector/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/GridEditor/Object Selector/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SaveButton" type="Button" parent="CanvasLayer/GridEditor"]
+offset_left = 64.0
+offset_right = 120.0
+offset_bottom = 31.0
+text = "Save"
+
+[node name="LoadButton" type="Button" parent="CanvasLayer/GridEditor"]
+offset_right = 56.0
+offset_bottom = 31.0
+text = "Load"
+
+[node name="SaveMenu" type="Panel" parent="CanvasLayer/GridEditor" node_paths=PackedStringArray("Save", "Input", "Accept", "Cancel")]
+visible = false
+offset_left = 512.0
+offset_top = 296.0
+offset_right = 640.0
+offset_bottom = 384.0
+script = ExtResource("8_7syiq")
+Save = NodePath("../SaveButton")
+Input = NodePath("LineEdit")
+Accept = NodePath("AcceptButton")
+Cancel = NodePath("CancelButton")
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/GridEditor/SaveMenu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -64.0
+offset_right = 128.0
+offset_bottom = -32.0
+
+[node name="Label" type="Label" parent="CanvasLayer/GridEditor/SaveMenu"]
+layout_mode = 1
+offset_right = 128.0
+offset_bottom = 32.0
+text = "Save Name:"
+horizontal_alignment = 1
+
+[node name="CancelButton" type="Button" parent="CanvasLayer/GridEditor/SaveMenu"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+offset_right = 64.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="AcceptButton" type="Button" parent="CanvasLayer/GridEditor/SaveMenu"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -32.0
+offset_right = 128.0
+grow_vertical = 0
+text = "Accept"
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.433013, -0.25, 0, 0.5, 0.866025, 0.5, -0.75, 0.433013, 0, 0, 0)
+
+[node name="Grid3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("6_6le7n")

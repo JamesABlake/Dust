@@ -1,6 +1,8 @@
-using Dust;
+/*
 using Godot;
 using System;
+
+namespace Dust;
 
 [Tool]
 public partial class UI_Vector3I : Control
@@ -33,3 +35,4 @@ public partial class UI_Vector3I : Control
 		Z.OnChange += _ => OnChange(Vector);
 	}
 }
+*/

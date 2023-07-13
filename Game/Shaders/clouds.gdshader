@@ -44,21 +44,10 @@ float noise(vec3 p) {
 }
 
 float density(vec3 position) {
-	float modifier = 0.0;
 	if(cloud_heights[1] < position.y && position.y < cloud_heights[2])
 		return 1.0;
-	
-	// -5 > 5: 5 - -5 / 5 - - 5
-	if(cloud_heights[0] < position.y && position.y < cloud_heights[1])
-		modifier = (position.y - cloud_heights[0]) / (cloud_heights[1] - cloud_heights[0]);
 		
-	if(cloud_heights[2] < position.y && position.y < cloud_heights[3])
-		modifier = (position.y - cloud_heights[2]) / (cloud_heights[3] - cloud_heights[2]);
-		
-	//modifier = 1.0-modifier;
-	modifier = 0.0;
-	//return textureLod(cloud_noise, position * cloud_scale + cloud_offset + vec3(TIME * 0.1), 0.0).r * cloud_density_mod + 0.1;
-	return max(noise(position * cloud_scale + cloud_offset + vec3(TIME * 0.1)) * cloud_density_mod, modifier);
+	return texture(cloud_noise, (position + cloud_offset + vec3(TIME * 0.1, 0, TIME * 0.1)) * cloud_scale).r * cloud_density_mod;
 }
 
 float myDepth(vec2 screen_uv, mat4 inv_proj_matrix) {
@@ -173,7 +162,7 @@ void fragment() {
 	// Outside cloud and pointing towards it unblocked
 	} else {
 		float dstTravelled = 0.0;
-		float dstLimit =  min(min(depth - dstToShallow, shallowDepth), 4000) * 2.0;
+		float dstLimit =  min(min(depth - dstToShallow, shallowDepth), 4000);
 		float stepSize = dstLimit / float(num_steps);
 		
 		float transmittance = 1.0;

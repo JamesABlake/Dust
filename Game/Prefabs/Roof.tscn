@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bu1ik4xssta1n"]
+
+[ext_resource type="Script" path="res://Game/Scripts/Grids/Edge.cs" id="1_prh2y"]
+[ext_resource type="BoxMesh" uid="uid://dxwbco126vt71" path="res://Resources/Objects/Box.tres" id="2_fq1dv"]
+
+[node name="Edge" type="Node3D"]
+script = ExtResource("1_prh2y")
+DefaultDirection = 16
+PlacementDirectionsAllowed = 16
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = ExtResource("2_fq1dv")

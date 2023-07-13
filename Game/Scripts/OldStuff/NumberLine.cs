@@ -1,3 +1,4 @@
+/*
 using Godot;
 using System;
 using System.Text.RegularExpressions;
@@ -32,3 +33,4 @@ public partial class NumberLine : LineEdit
 		}
 	}
 }
+*/
