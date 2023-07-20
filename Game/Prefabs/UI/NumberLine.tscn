@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://do5vyk4rm4jv7"]
+
+[ext_resource type="Script" path="res://Game/Scripts/NumberLine.cs" id="1_qtd3l"]
+
+[node name="NumberLine" type="LineEdit"]
+offset_right = 72.0
+offset_bottom = 32.0
+script = ExtResource("1_qtd3l")

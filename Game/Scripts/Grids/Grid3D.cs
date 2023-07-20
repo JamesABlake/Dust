@@ -10,8 +10,9 @@ public partial class Grid3D : Node3D
 	private Bounds3I _boundingBox;
 	private MeshInstance3D? _gridVisualization;
 	private readonly Dictionary<Vector3I, Cell> _grid = new();
-	private const int Radius = 10;
-	private readonly Vector3 VisualOffset = new(-0.5f, -0.5f, -0.5f);
+
+	private const int VisualRadius = 10;
+	private readonly Vector3 GridOffset = new(-0.5f, -0.5f, -0.5f);
 
 	/// <summary>
 	/// Gets or adds a cell at a position.
@@ -29,7 +30,6 @@ public partial class Grid3D : Node3D
 		_boundingBox.Expand(position);
 		return true;
 	}
-
 	public bool RemoveCell(Vector3I position)
 	{
 		bool modified = _grid.Remove(position);
@@ -45,6 +45,10 @@ public partial class Grid3D : Node3D
 	public Cell GetCell(Vector3I position) => _grid[position];
 	public bool TryGetCell(Vector3I position, [MaybeNullWhen(false)] out Cell cell) => _grid.TryGetValue(position, out cell);
 	public Bounds3I GetBounds() => _boundingBox;
+
+	public Vector3I ToGridspace(Vector3 position) => ToLocal(position).RoundToInt();
+	public Vector3I ToVertspace(Vector3 position) => ToLocal(position + GridOffset).RoundToInt();
+
 	public void VisualizeGridAtLocalHeight(int height)
 	{
 		// If the grid is null, generate it
@@ -60,15 +64,15 @@ public partial class Grid3D : Node3D
 			};
 
 			immediate_mesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
-			for (int line = -Radius + 1; line <= Radius; line++)
+			for (int line = -VisualRadius + 1; line <= VisualRadius; line++)
 			{
 				// Lines perpendicular to the X axis
-				immediate_mesh.SurfaceAddVertex(new Vector3(line, 0, -Radius + 1) + VisualOffset);
-				immediate_mesh.SurfaceAddVertex(new Vector3(line, 0, Radius) + VisualOffset);
+				immediate_mesh.SurfaceAddVertex(new Vector3(line, 0, -VisualRadius + 1) + GridOffset);
+				immediate_mesh.SurfaceAddVertex(new Vector3(line, 0, VisualRadius) + GridOffset);
 
 				// Lines perpendicular to the Z axis
-				immediate_mesh.SurfaceAddVertex(new Vector3(-Radius + 1, 0, line) + VisualOffset);
-				immediate_mesh.SurfaceAddVertex(new Vector3(Radius, 0, line) + VisualOffset);
+				immediate_mesh.SurfaceAddVertex(new Vector3(-VisualRadius + 1, 0, line) + GridOffset);
+				immediate_mesh.SurfaceAddVertex(new Vector3(VisualRadius, 0, line) + GridOffset);
 			}
 			immediate_mesh.SurfaceEnd();
 
@@ -78,18 +82,30 @@ public partial class Grid3D : Node3D
 		_gridVisualization.Position = _gridVisualization.Position.With(null, height, null);
 	}
 
-	public bool TryGetRayIntersectionCell(Vector3 origin, Vector3 direction, int planeHeight, out Vector3I hit)
+	public Vector3 SnapToGrid(Vector3 position)
 	{
-		Plane plane = new(Vector3.Up, planeHeight - 0.5f);
-		Vector3? planeHit = plane.IntersectsRay(ToLocal(origin), ToLocal(direction));
+		return ToGlobal(ToLocal(position).RoundToInt());
+	}
+
+	public Vector3 SnapToVert(Vector3 position)
+	{
+		return ToGlobal(ToLocal(position + new Vector3(0.5f, 0, 0.5f)).RoundToInt() + GridOffset);
+	}
+	public bool TryGetIntersection(Ray ray, float height, out Vector3 hit)
+	{
+		Plane plane = new(Vector3.Up, height + GridOffset.Y);
+		Vector3? planeHit = plane.IntersectsRay(ToLocal(ray.Origin), GlobalTransform.Basis.Inverse() * ray.Direction);
 		if (planeHit.HasValue)
 		{
-			hit = MathV.RoundToInt(planeHit.Value);
-			hit.Y = planeHeight;
+			hit = ToGlobal(planeHit.Value);
 			return true;
 		}
 
-		hit = Vector3I.Zero;
+		hit = Vector3.Zero;
 		return false;
+	}
+	public int GetHeightAt(Vector3 position)
+	{
+		return ToLocal(position).RoundToInt().Y;
 	}
 }

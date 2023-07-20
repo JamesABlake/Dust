@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://h4ivgbh0epwx"]
+
+[ext_resource type="Texture2D" uid="uid://coaix037teb48" path="res://Assets/Tile.png" id="1_434yv"]
+[ext_resource type="Script" path="res://Game/Scripts/FloorDesigner.cs" id="1_ptqq7"]
+[ext_resource type="Texture2D" uid="uid://blf15qovb5s2i" path="res://Assets/Angle.png" id="2_2ocn4"]
+[ext_resource type="Texture2D" uid="uid://ceeekaahq2p44" path="res://Assets/Arc.png" id="3_qr8ur"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_sq11b"]
+
+[node name="FloorDesigner" type="Panel" node_paths=PackedStringArray("TileButton", "AngleButton", "ArcButton")]
+offset_right = 192.0
+offset_bottom = 64.0
+script = ExtResource("1_ptqq7")
+TileButton = NodePath("TileButton")
+AngleButton = NodePath("AngleButton")
+ArcButton = NodePath("ArcButton")
+
+[node name="TileButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 56.0
+toggle_mode = true
+button_group = SubResource("ButtonGroup_sq11b")
+icon = ExtResource("1_434yv")
+icon_alignment = 1
+expand_icon = true
+
+[node name="AngleButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 8.0
+offset_right = 112.0
+offset_bottom = 56.0
+toggle_mode = true
+button_group = SubResource("ButtonGroup_sq11b")
+icon = ExtResource("2_2ocn4")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ArcButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 8.0
+offset_right = 168.0
+offset_bottom = 56.0
+toggle_mode = true
+button_group = SubResource("ButtonGroup_sq11b")
+icon = ExtResource("3_qr8ur")
+icon_alignment = 1
+expand_icon = true

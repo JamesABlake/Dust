@@ -1,14 +1,27 @@
-[gd_scene load_steps=10 format=3 uid="uid://0dsmbxkwvv0v"]
+[gd_scene load_steps=13 format=3 uid="uid://0dsmbxkwvv0v"]
 
 [ext_resource type="Script" path="res://Game/Scripts/CameraController.cs" id="1_yu0s7"]
 [ext_resource type="Script" path="res://Game/Scripts/Grids/Editor/ObjectSelector.cs" id="2_rp0i3"]
-[ext_resource type="PackedScene" uid="uid://dwin3uknp88rs" path="res://Game/Prefabs/Wall.tscn" id="3_23tov"]
-[ext_resource type="PackedScene" uid="uid://dulff7qmhus1q" path="res://Game/Prefabs/Floor.tscn" id="4_3iesi"]
 [ext_resource type="PackedScene" uid="uid://bni8d78amkvwy" path="res://Game/Prefabs/Designer/UI_Button.tscn" id="4_yyl1y"]
-[ext_resource type="PackedScene" uid="uid://bu1ik4xssta1n" path="res://Game/Prefabs/Roof.tscn" id="5_nltoh"]
 [ext_resource type="Script" path="res://Game/Scripts/Grids/Grid3D.cs" id="6_6le7n"]
+[ext_resource type="PackedScene" uid="uid://h4ivgbh0epwx" path="res://Game/Scenes/FloorDesigner.tscn" id="6_kh550"]
 [ext_resource type="Script" path="res://Game/Scripts/Grids/Editor/GridEditor.cs" id="7_67se0"]
-[ext_resource type="Script" path="res://Game/Scripts/UserInterface/UI_SaveMenu.cs" id="8_7syiq"]
+[ext_resource type="ArrayMesh" uid="uid://dorey5wam35xq" path="res://Assets/Objects/Angled.res" id="7_xmwli"]
+[ext_resource type="Script" path="res://Game/Scripts/UI/UI_SaveMenu.cs" id="8_7syiq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yme7p"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rsqa8"]
+size = Vector3(1, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_86pai"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="MultiMesh" id="MultiMesh_u0djv"]
+transform_format = 1
+mesh = SubResource("SphereMesh_86pai")
 
 [node name="Designer" type="Node3D"]
 
@@ -27,25 +40,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="GridEditor" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("Selector", "Grid3D")]
+[node name="GridEditor" type="Node" parent="CanvasLayer" node_paths=PackedStringArray("Grid3D", "FloorDesigner")]
 script = ExtResource("7_67se0")
-Radius = 20
-Selector = NodePath("Object Selector")
 Grid3D = NodePath("../../Grid3D")
+FloorDesigner = NodePath("FloorDesigner")
 
-[node name="Object Selector" type="Control" parent="CanvasLayer/GridEditor" node_paths=PackedStringArray("Label", "ButtonContainer")]
+[node name="Toolbar" type="Control" parent="CanvasLayer/GridEditor" node_paths=PackedStringArray("Label", "ButtonContainer")]
 layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
 script = ExtResource("2_rp0i3")
-Palette = Array[PackedScene]([ExtResource("4_3iesi"), ExtResource("3_23tov"), ExtResource("5_nltoh")])
+Palette = Array[PackedScene]([])
 Label = NodePath("Label")
 ButtonContainer = NodePath("PanelContainer/MarginContainer/HBoxContainer")
 ButtonPrefab = ExtResource("4_yyl1y")
 
-[node name="Label" type="Label" parent="CanvasLayer/GridEditor/Object Selector"]
+[node name="Label" type="Label" parent="CanvasLayer/GridEditor/Toolbar"]
 layout_mode = 2
 offset_top = -104.0
 offset_right = 224.0
@@ -53,7 +65,7 @@ offset_bottom = -72.0
 grow_vertical = 0
 text = "Selected Label"
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/GridEditor/Object Selector"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/GridEditor/Toolbar"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -62,14 +74,14 @@ offset_top = -80.0
 offset_right = 80.0
 grow_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/GridEditor/Object Selector/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/GridEditor/Toolbar/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/GridEditor/Object Selector/PanelContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/GridEditor/Toolbar/PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
@@ -133,9 +145,30 @@ offset_right = 128.0
 grow_vertical = 0
 text = "Accept"
 
+[node name="FloorDesigner" parent="CanvasLayer/GridEditor" node_paths=PackedStringArray("PointMultiMesh", "TileMesh", "AngleMesh") instance=ExtResource("6_kh550")]
+offset_left = 960.0
+offset_top = 584.0
+offset_right = 1152.0
+offset_bottom = 648.0
+IntersectMaterial = SubResource("StandardMaterial3D_yme7p")
+PointMultiMesh = NodePath("MultiMeshInstance3D")
+TileMesh = NodePath("Tile")
+AngleMesh = NodePath("Angle")
+
+[node name="Tile" type="MeshInstance3D" parent="CanvasLayer/GridEditor/FloorDesigner"]
+visible = false
+mesh = SubResource("BoxMesh_rsqa8")
+
+[node name="Angle" type="MeshInstance3D" parent="CanvasLayer/GridEditor/FloorDesigner"]
+visible = false
+mesh = ExtResource("7_xmwli")
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="CanvasLayer/GridEditor/FloorDesigner"]
+multimesh = SubResource("MultiMesh_u0djv")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, 0.433013, -0.25, 0, 0.5, 0.866025, 0.5, -0.75, 0.433013, 0, 0, 0)
 
 [node name="Grid3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("6_6le7n")

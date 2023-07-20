@@ -13,11 +13,15 @@ config_version=5
 config/name="Dust"
 run/main_scene="res://Game/Scenes/Designer.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
-config/icon="res://Resources/icon.svg"
+config/icon="res://Assets/icon.svg"
 
 [dotnet]
 
 project/assembly_name="Dust"
+
+[filesystem]
+
+import/fbx/enabled=false
 
 [input]
 
