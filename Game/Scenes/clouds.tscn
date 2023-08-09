@@ -8,7 +8,8 @@ offsets = PackedFloat32Array(0.515789, 1)
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_shxhd"]
 
 [sub_resource type="NoiseTexture3D" id="NoiseTexture3D_fd3lo"]
-height = 16
+width = 256
+depth = 256
 seamless = true
 seamless_blend_skirt = 1.0
 color_ramp = SubResource("Gradient_q8kx5")
@@ -19,14 +20,14 @@ render_priority = 0
 shader = ExtResource("1_5aabm")
 shader_parameter/cloud_heights = Vector4(-105, -95, -5, 5)
 shader_parameter/cloud_offset = Vector3(0, 0, 0)
-shader_parameter/cloud_scale = Vector3(0.1, 0.1, 0.1)
+shader_parameter/cloud_scale = Vector3(0.001, 0.1, 0.001)
 shader_parameter/cloud_density_mod = 1.0
 shader_parameter/light_absorption_to_cloud = 0.95
 shader_parameter/light_absorption_to_sun = 0.25
 shader_parameter/light_dir = Vector3(0, -1, 0)
 shader_parameter/light_color = Vector3(1, 1, 1)
 shader_parameter/phase_value = 0.85
-shader_parameter/num_steps = 64
+shader_parameter/num_steps = 128
 shader_parameter/num_steps_light = 2
 shader_parameter/cloud_noise = SubResource("NoiseTexture3D_fd3lo")
 

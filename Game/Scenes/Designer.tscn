@@ -160,7 +160,6 @@ visible = false
 mesh = SubResource("BoxMesh_rsqa8")
 
 [node name="Angle" type="MeshInstance3D" parent="CanvasLayer/GridEditor/FloorDesigner"]
-visible = false
 mesh = ExtResource("7_xmwli")
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="CanvasLayer/GridEditor/FloorDesigner"]

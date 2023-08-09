@@ -154,15 +154,28 @@ public partial class FloorDesigner : GridTool
 			Grid3D.AddChild(mesh);
 
 			mesh.GlobalPosition = (pointA + pointB) / 2;
-			float rotation =
-			mesh.RotateY();
-			mesh.Scale = new Vector3(Mathf.Abs(pointA.X - pointB.X), 1, Mathf.Abs(pointA.Z - pointB.Z));
+			float rotation = GetAngledRotation((pointA + pointB) / 2, lastMousePosition);
+			mesh.RotateY(rotation);
+			mesh.Scale = new Vector3(Mathf.Abs(pointA.X - pointB.X), 1, Mathf.Abs(pointA.Z - pointB.Z)).Rotated(Vector3.Up, rotation).Abs();
 			mesh.Visible = true;
 
 			Reset();
 		}
 		else
 			Reset();
+	}
+
+	private float GetAngledRotation(Vector3 center, Vector3 anglePosition)
+	{
+		// Godot uses negative Z for north, positive X for East
+		return Mathf.Pi + (anglePosition - center) switch
+		{
+			{ X: > 0, Y: _, Z: < 0 } => 0,
+			{ X: < 0, Y: _, Z: < 0 } => Mathf.Pi / 2,
+			{ X: < 0, Y: _, Z: > 0 } => Mathf.Pi,
+			{ X: > 0, Y: _, Z: > 0 } => Mathf.Pi / 2 * 3,
+			_ => throw new System.ArgumentException($"{nameof(center)} and {nameof(anglePosition)} should not overlap")
+		};
 	}
 
 	private void SetMode(Mode mode, Button button)

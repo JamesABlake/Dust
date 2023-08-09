@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dust"
-run/main_scene="res://Game/Scenes/Designer.tscn"
+run/main_scene="res://Game/Scenes/GameScene.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://Assets/icon.svg"
 

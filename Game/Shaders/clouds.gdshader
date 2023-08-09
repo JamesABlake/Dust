@@ -20,29 +20,6 @@ uniform int num_steps_light;
 
 const float epsilon = 0.001;
 
-vec3 hash(vec3 p) {
-    p = vec3(dot(p, vec3(127.1, 311.7, 74.7)),
-             dot(p, vec3(269.5, 183.3, 246.1)),
-             dot(p, vec3(113.5, 271.9, 124.6)));
-
-    return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
-}
-
-float noise(vec3 p) {
-  vec3 i = floor(p);
-  vec3 f = fract(p);
-  vec3 u = f * f * (3.0 - 2.0 * f);
-
-  return mix(mix(mix(dot(hash(i + vec3(0.0, 0.0, 0.0)), f - vec3(0.0, 0.0, 0.0)),
-                     dot(hash(i + vec3(1.0, 0.0, 0.0)), f - vec3(1.0, 0.0, 0.0)), u.x),
-                 mix(dot(hash(i + vec3(0.0, 1.0, 0.0)), f - vec3(0.0, 1.0, 0.0)),
-                     dot(hash(i + vec3(1.0, 1.0, 0.0)), f - vec3(1.0, 1.0, 0.0)), u.x), u.y),
-             mix(mix(dot(hash(i + vec3(0.0, 0.0, 1.0)), f - vec3(0.0, 0.0, 1.0)),
-                     dot(hash(i + vec3(1.0, 0.0, 1.0)), f - vec3(1.0, 0.0, 1.0)), u.x),
-                 mix(dot(hash(i + vec3(0.0, 1.0, 1.0)), f - vec3(0.0, 1.0, 1.0)),
-                     dot(hash(i + vec3(1.0, 1.0, 1.0)), f - vec3(1.0, 1.0, 1.0)), u.x), u.y), u.z );
-}
-
 float density(vec3 position) {
 	if(cloud_heights[1] < position.y && position.y < cloud_heights[2])
 		return 1.0;
@@ -99,22 +76,6 @@ vec3 cloudInfo(vec3 origin, vec3 dir) {
 	
 	// Inside deep
 	return vec3(-1.0, -1.0, 0);
-}
-
-vec2 cloudDistanceAndDepth(vec3 origin, vec3 dir) {
-	float t0 = (cloud_heights[2] - origin.y) / dir.y;
-	float t1 = (cloud_heights[3] - origin.y) / dir.y;
-	
-	float tMin = min(t0, t1);
-	float tMax = max(t0, t1);
-	
-	if(tMin >= epsilon && tMax >= epsilon)
-		return vec2(tMin, tMax - tMin);
-		
-	if(tMin < epsilon && tMax >= epsilon)
-		return vec2(0.0, tMax);
-		
-	return vec2(-1.0);
 }
 
 float lightMarch(vec3 position) {

@@ -1,42 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://pk8430c0po35"]
+[gd_scene load_steps=7 format=3 uid="uid://pk8430c0po35"]
 
-[ext_resource type="Script" path="res://Game/Scripts/Grid.cs" id="1_cenyj"]
+[ext_resource type="Script" path="res://Game/Scripts/CameraController.cs" id="1_cenyj"]
 
-[sub_resource type="CSharpScript" id="CSharpScript_aa2yu"]
-script/source = "using Godot;
-namespace Dust;
-public partial class Test : Node3D
-{
-	private Vector2 _mousePosition;
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xcorc"]
+sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
 
-	public override void _PhysicsProcess(double delta)
-	{
-		var camera3D = GetNode<Camera3D>(\"Camera3D\");
-		var from = camera3D.ProjectRayOrigin(_mousePosition);
-		var to = from + (camera3D.ProjectRayNormal(_mousePosition) * 100);
+[sub_resource type="Sky" id="Sky_45phi"]
+sky_material = SubResource("ProceduralSkyMaterial_xcorc")
 
-		var space = GetWorld3D().DirectSpaceState;
-		var ray = PhysicsRayQueryParameters3D.Create(from, to);
-		ray.CollideWithBodies = true;
-		var result = space.IntersectRay(ray);
+[sub_resource type="Environment" id="Environment_u8ip3"]
+background_mode = 2
+sky = SubResource("Sky_45phi")
+ambient_light_source = 3
+reflected_light_source = 2
 
-		if (result.Count > 0)
-			GD.Print($\"Hit at {result[\"position\"]}\");
-	}
-	public override void _Input(InputEvent @event)
-	{
-		if (@event is InputEventMouseMotion eventMouseMotion)
-			_mousePosition = eventMouseMotion.Position;
-	}
-}
-"
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_ccu5y"]
 
-[node name="Node3D" type="Node3D"]
-script = SubResource("CSharpScript_aa2yu")
+[sub_resource type="PlaneMesh" id="PlaneMesh_xnkd1"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.939663, 0.171051, -0.296269, -7.35918e-09, 0.866025, 0.5, 0.342103, 0.469832, -0.813772, 3.18068, 1.7174, 0.0500557)
+[node name="Game" type="Node3D"]
 
-[node name="Node3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.322443, 0.85, 0.068)
+[node name="Camera Base" type="Node3D" parent="." node_paths=PackedStringArray("Boom", "Camera")]
 script = ExtResource("1_cenyj")
+Boom = NodePath("Camera Boom")
+Camera = NodePath("Camera Boom/Camera3D")
+MoveSpeedMod = 0.1
+RotationSpeedMod = 0.01
+
+[node name="Camera Boom" type="Node3D" parent="Camera Base"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Camera Base/Camera Boom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+environment = SubResource("Environment_u8ip3")
+attributes = SubResource("CameraAttributesPractical_ccu5y")
+fov = 37.8493
+far = 16000.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_xnkd1")
